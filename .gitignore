@@ -1,5 +1,1 @@
-```
-# Database files
-*.db
-database.db
-```
+Nothing should be ignored based on the provided file changes, as they only include source code files (.php) and no build artifacts, dependencies, or temporary files.

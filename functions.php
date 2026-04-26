@@ -371,3 +371,29 @@ function extrairResumo(string $conteudo, int $maxChars = 200): string {
     }
     return mb_substr($texto, 0, $maxChars) . '...';
 }
+
+/**
+ * Gera slug SEO friendly a partir de um título
+ * @param string $titulo
+ * @return string
+ */
+function generateSlug(string $titulo): string {
+    // Converte para lowercase
+    $slug = mb_strtolower($titulo, 'UTF-8');
+    
+    // Remove acentos e caracteres especiais
+    $slug = preg_replace('~[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]~u', 'a', $slug);
+    $slug = preg_replace('~[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]~i', '', $slug);
+    $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+    
+    // Substitui espaços por hífens
+    $slug = preg_replace('/[\s_]+/', '-', $slug);
+    
+    // Remove hífens múltiplos
+    $slug = preg_replace('/-+/', '-', $slug);
+    
+    // Remove hífens das extremidades
+    $slug = trim($slug, '-');
+    
+    return $slug;
+}

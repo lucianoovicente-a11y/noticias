@@ -110,7 +110,7 @@ function initializeDatabase(): void {
  * @param string $title
  * @return string
  */
-function generateSlug(string $title): string {
+function generateSlugDb(string $title): string {
     $slug = mb_strtolower(trim($title), 'UTF-8');
     $slug = preg_replace('/[^a-z0-9-]/', '-', $slug);
     $slug = preg_replace('/-+/', '-', $slug);

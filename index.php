@@ -13,10 +13,8 @@ if (precisaAtualizarNoticias()) {
 
 // Roteamento simples
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$basePath = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-if ($basePath !== '/' && $basePath !== '') {
-    $requestUri = substr($requestUri, strlen($basePath));
-}
+
+// Remove query string e normaliza
 $requestUri = trim($requestUri, '/');
 
 // Determina a página atual
@@ -24,18 +22,18 @@ $page = 'home';
 $noticia = null;
 $categoria = null;
 
-if (empty($requestUri) || $requestUri === 'index.php') {
+if (empty($requestUri) || $requestUri === 'index.php' || $requestUri === 'router.php') {
     $page = 'home';
-} elseif (strpos($requestUri, 'noticia/') === 0) {
+} elseif (preg_match('#^noticia/([a-z0-9-]+)$#', $requestUri, $matches)) {
     $page = 'noticia';
-    $slug = str_replace('noticia/', '', $requestUri);
+    $slug = $matches[1];
     $noticia = getNoticiaBySlug($slug);
     if (!$noticia) {
         http_response_code(404);
     }
-} elseif (strpos($requestUri, 'categoria/') === 0) {
+} elseif (preg_match('#^categoria/([a-z0-9-]+)$#', $requestUri, $matches)) {
     $page = 'categoria';
-    $categoria = str_replace('categoria/', '', $requestUri);
+    $categoria = $matches[1];
     if (!array_key_exists($categoria, getCategories())) {
         http_response_code(404);
         $page = 'home';
@@ -49,7 +47,8 @@ if (empty($requestUri) || $requestUri === 'index.php') {
         
         if ($idEnquete && $idOpcao) {
             $success = registrarVoto($idEnquete, $idOpcao);
-            header('Location: ' . $_SERVER['HTTP_REFERER'] . '?voto=' . ($success ? '1' : '0'));
+            $referer = $_SERVER['HTTP_REFERER'] ?? '/';
+            header('Location: ' . $referer . '?voto=' . ($success ? '1' : '0'));
             exit;
         }
     }
