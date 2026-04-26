@@ -1,0 +1,38 @@
+# .htaccess - URL Rewriting para SEO Friendly URLs
+# Portal de Notícias SEO Pro + Enquetes
+
+# Habilita mod_rewrite
+RewriteEngine On
+
+# Define a base
+RewriteBase /
+
+# Redireciona para HTTPS (opcional - descomente em produção com SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Previne acesso direto ao banco de dados
+<Files "database.db">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Previne listagem de diretórios
+Options -Indexes
+
+# URLs amigáveis para notícias
+RewriteRule ^noticia/([a-z0-9-]+)$ index.php [QSA,L]
+
+# URLs amigáveis para categorias
+RewriteRule ^categoria/([a-z0-9-]+)$ index.php [QSA,L]
+
+# Rota para votação em enquetes
+RewriteRule ^votar$ index.php [QSA,L]
+
+# Remove extensão .php das URLs (opcional)
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME}\.php -f
+# RewriteRule ^(.*)$ $1.php [L]
+
+# Página de erro personalizada (opcional)
+# ErrorDocument 404 /index.php

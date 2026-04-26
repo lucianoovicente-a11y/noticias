@@ -1,0 +1,12 @@
+```
+# Logs and temp files
+*.log
+server.log
+
+# Database files
+database.db
+
+# Image placeholders (if they are temporary/generated)
+assets/news-placeholder.jpg
+assets/placeholder.svg
+```
